@@ -1,7 +1,6 @@
 package jpql;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.List;
 
 public class JpaMain {
@@ -40,25 +39,13 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String query = "select t from Team t";
-            List<Team> result = em.createQuery(query, Team.class)
-                    .setFirstResult(0)
-                    .setMaxResults(2)
+            String query = "select m from Member m where m.team = :team";
+            List<Member> members = em.createQuery(query, Member.class)
+                    .setParameter("team", teamA)
                     .getResultList();
 
-            System.out.println("result.size() = " + result.size());
-            
-            for (Team team : result) {
-                System.out.println("team = " + team.getName() + " | team's member size = " + team.getMembers().size());
-
-                for (Member member : team.getMembers()) {
-                    System.out.println("-> member = " + member);
-                }
-                // 회원1, 팀A(SQL)
-                // 회원2, 팀A(1차 캐시)
-                // 회원3, 팀B(SQL)
-
-                // 회원 100명 -> N + 1
+            for (Member member : members) {
+                System.out.println("member = " + member);
             }
 
             tx.commit();
