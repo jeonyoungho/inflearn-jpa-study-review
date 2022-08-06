@@ -49,7 +49,7 @@ public class JpaMain {
             System.out.println("result.size() = " + result.size());
             
             for (Team team : result) {
-                System.out.println("team = " + team.getName() + " | " + team.getMembers().size());
+                System.out.println("team = " + team.getName() + " | team's member size = " + team.getMembers().size());
 
                 for (Member member : team.getMembers()) {
                     System.out.println("-> member = " + member);
