@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -41,4 +42,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // @Query DTO 조회하기
     @Query("select new study.datajpa.dto.MemberDto(m.id, m.username, t.name) from Member m join m.team t")
     List<MemberDto> findMemberDto();
+
+    // @Query 파라미터 바인딩 (실무에서 많이 사용)
+    // 위치 기반, 이름 기반 두 가지가 있는데 이름 기반만 사용할 것
+    // 위치 기반은 코드 가독성에서나 유지보수 관점에서나 좋지 못함
+    // 파라미터 위치가 달라지면 오류가 발생하게 될 확률 높음
+    @Query("select m from Member m where m.username in :names")
+    List<Member> findByNames(@Param("names") Collection<String> names);
+
+
 }
