@@ -30,6 +30,8 @@ class MemberRepositoryTest {
 	@Autowired TeamRepository teamRepository;
 	@PersistenceContext EntityManager em;
 
+	@Autowired MemberQueryRepository memberQueryRepository;
+
 	@Test
 	public void testMember() {
 		Member member = new Member("memberA");
@@ -166,7 +168,7 @@ class MemberRepositoryTest {
 		memberRepository.save(m2);
 
 //		List<Member> result = memberRepository.findListByUsername("AAA");
-		
+
 //		Member member = memberRepository.findMemberByUsername("AAA");
 //		System.out.println("member = " + member);
 
@@ -297,5 +299,10 @@ class MemberRepositoryTest {
 
 		// when
 		List<Member> result = memberRepository.findLockByUsername("member1");
+	}
+
+	@Test
+	public void callCustom() {
+		List<Member> result = memberRepository.findMemberCustom();
 	}
 }
