@@ -11,6 +11,7 @@ import study.datajpa.entity.Team;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -148,6 +149,31 @@ class MemberRepositoryTest {
 		for (Member member : result) {
 			System.out.println("member = " + member);
 		}
+	}
+
+	@Test
+	public void returnType() {
+		Member m1 = new Member("AAA", 10);
+		Member m2 = new Member("AAA", 20);
+		memberRepository.save(m1);
+		memberRepository.save(m2);
+
+//		List<Member> result = memberRepository.findListByUsername("AAA");
+		
+//		Member member = memberRepository.findMemberByUsername("AAA");
+//		System.out.println("member = " + member);
+
+//		// 결과가 없을 경우 빈 컬렉션을 반환해줌 (절대 null이 아님 jpa 가 보장을 해줌)
+//		List<Member> result = memberRepository.findListByUsername("asdfsda");
+//		System.out.println("result = " + result.size());
+//
+//		// jpa -> 하나를 getSingleResult 로 조회할 때 없으면 NoResultException 을 던짐
+//		// spring data jpa -> try catch 로 감싸서 null 로 리턴해줌
+//		Member findMember = memberRepository.findMemberByUsername("asdfsad");
+//		System.out.println("findMember = " + findMember);
+
+		Optional<Member> findMemberOptional = memberRepository.findOptionalByUsername("AAA");
+		System.out.println("findMemberOptional = " + findMemberOptional);
 	}
 
 
