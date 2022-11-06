@@ -18,7 +18,7 @@ import java.util.Optional;
  * Created by jyh1004 on 2022-10-31
  *
  * entityManager의 merge는 언제 사용하느냐?
- * -> 영속 상태의 엔티티가 어떠한 이유로 준영속 상태가 되었을 경우 다시 영속상태로 만들기 위해 사용한다.
+ * -> 영속 상태의 엔티티가 어떠한 이유로 detached 상태가 되었을 경우 다시 영속상태로 만들기 위해 사용한다.
  */
 
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
