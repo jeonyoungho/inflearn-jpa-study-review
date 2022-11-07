@@ -19,9 +19,11 @@ import java.util.Optional;
  *
  * entityManager의 merge는 언제 사용하느냐?
  * -> 영속 상태의 엔티티가 어떠한 이유로 detached 상태가 되었을 경우 다시 영속상태로 만들기 위해 사용한다.
+ * 
+ * Specification -> 실무에서 사용하지 말 것. 유지보수 관점에서 안좋음
  */
 
-public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom, JpaSpecificationExecutor<Member> {
 
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
