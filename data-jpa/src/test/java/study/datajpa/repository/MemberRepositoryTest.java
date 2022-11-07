@@ -4,10 +4,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -329,5 +326,48 @@ class MemberRepositoryTest {
 
 		// then
 		Assertions.assertThat(result.size()).isEqualTo(1);
+	}
+
+	// == query by example ==
+	@Test
+	public void queryByExample() {
+		// given
+		Team teamA = new Team("teamA");
+		teamRepository.save(teamA);
+
+		Member m1 = new Member("m1", 0, teamA);
+		Member m2 = new Member("m2", 0, teamA);
+		memberRepository.save(m1);
+		memberRepository.save(m2);
+
+		em.flush();
+		em.clear();
+
+		// when
+		// Probe
+		Member member = new Member("m1");
+		Team team = new Team("teamA");
+		member.setTeam(team);
+
+		// 조인해서 완벽한 해결이 안됨
+		// 조인이 다 해결안되면 실무에서 잘 도입하지 않는게 좋다.
+		// Example은 inner join만 가능하고 outer join은 안되는게 문제이다.
+		/*
+		- 다음과 같은 중첩 제약조건 안됨
+			- firstname = ?0 or (firstname = ?1 and lastname = ?2)
+		- 매칭 조건이 매우 단순함
+			- 문자는 starts/contains/ends/regex
+			- 다른 속성은 정확한 매칭( = )만 지원
+		 */
+		ExampleMatcher matcher = ExampleMatcher.matching()
+		                                   .withIgnorePaths("age");
+
+		Example<Member> example = Example.of(member, matcher);
+
+		List<Member> result = memberRepository.findAll(example);
+
+		// then
+		Assertions.assertThat(result.get(0).getUsername()).isEqualTo("m1");
+
 	}
 }
