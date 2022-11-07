@@ -368,6 +368,38 @@ class MemberRepositoryTest {
 
 		// then
 		Assertions.assertThat(result.get(0).getUsername()).isEqualTo("m1");
+	}
 
+	@Test
+	public void projections() {
+		// given
+		Team teamA = new Team("teamA");
+		teamRepository.save(teamA);
+
+		Member m1 = new Member("m1", 0, teamA);
+		Member m2 = new Member("m2", 0, teamA);
+		memberRepository.save(m1);
+		memberRepository.save(m2);
+
+		em.flush();
+		em.clear();
+
+	    // when
+//		List<UsernameOnly> result = memberRepository.findProjectionsByUsername("m1");
+//		List<UsernameOnlyDto> result = memberRepository.findProjectionsByUsername("m1", UsernameOnlyDto.class);
+		List<NestedClosedProjections> result = memberRepository.findProjectionsByUsername("m1", NestedClosedProjections.class);
+
+		// 중첩 구조일때 select 절 최적화가 안됨
+		for (NestedClosedProjections nestedClosedProjections : result) {
+//			System.out.println("nestedClosedProjections = " + nestedClosedProjections);
+			String username = nestedClosedProjections.getUsername();
+			System.out.println("username = " + username);
+
+			String teamName = nestedClosedProjections.getTeam().getName();
+			System.out.println("teamName = " + teamName);
+		}
+
+
+		// then
 	}
 }

@@ -19,7 +19,7 @@ import java.util.Optional;
  *
  * entityManager의 merge는 언제 사용하느냐?
  * -> 영속 상태의 엔티티가 어떠한 이유로 detached 상태가 되었을 경우 다시 영속상태로 만들기 위해 사용한다.
- * 
+ *
  * Specification -> 실무에서 사용하지 말 것. 유지보수 관점에서 안좋음
  */
 
@@ -104,6 +104,13 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     // select for update (DB에 select 할떄 다른애들 손대지마! 하고 락을 걸수가 있음
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Member> findLockByUsername(String username);
+
+    // == Projections ==
+//    List<UsernameOnly> findProjectionsByUsername(@Param("username") String username);
+//    List<UsernameOnlyDto> findProjectionsByUsername(@Param("username") String username);
+
+    // 동적 프로젝션
+    <T> List<T> findProjectionsByUsername(@Param("username") String username, Class<T> type);
 
 
 }
