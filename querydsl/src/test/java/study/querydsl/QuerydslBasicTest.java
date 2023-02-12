@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import study.querydsl.dto.MemberDto;
+import study.querydsl.dto.QMemberDto;
 import study.querydsl.dto.UserDto;
 import study.querydsl.entity.Member;
 import study.querydsl.entity.QMember;
@@ -589,6 +590,21 @@ class QuerydslBasicTest {
             System.out.println("userDto = " + userDto);
         }
     }
+
+    @Test
+    void findDtoByQueryProjection() {
+        List<MemberDto> result = queryFactory
+                // 컴파일 시점에 타입이 안맞으면 오류를 바로 검출 가능
+                // 위의 Projection.constructor 의 경우엔 런타임에 오류 발견 가능 (예를 들어, 실수로 파라미터를 3개로 넣은 경우)
+                .select(new QMemberDto(member.username, member.age))
+                .from(member)
+                .fetch();
+        for (MemberDto memberDto : result) {
+            System.out.println("memberDto = " + memberDto);
+        }
+    }
+
+
 
 
 }
