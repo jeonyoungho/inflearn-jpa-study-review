@@ -16,6 +16,15 @@ import java.util.List;
  * - 클라이언트가 Querydsl에 의존해야 한다. 서비스 클래스가 Querydsl이라는 구현 기술에 의존해야 한다. 복잡한 실무환경에서 사용하기에는 한계가 명확하다.
  *
  * - 참고: QuerydslPredicateExecutor 는 Pagable, Sort를 모두 지원하고 정상 동작한다.
+ *
+ * Querydsl Web 지원
+ *
+ * 공식 URL: https://docs.spring.io/spring-data/jpa/docs/2.2.3.RELEASE/reference/html/#core.web.type-safe
+ *
+ * 한계점
+ * - 단순한 조건만 가능
+ * - 조건을 커스텀하는 기능이 복잡하고 명시적이지 않음 컨트롤러가 Querydsl에 의존
+ * - 복잡한 실무환경에서 사용하기에는 한계가 명확
  */
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom, QuerydslPredicateExecutor<Member> {
     // select m from Member m where m.username = ?
